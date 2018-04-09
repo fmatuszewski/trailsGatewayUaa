@@ -1,0 +1,16 @@
+version: '2'
+services:
+    trailsgatewayuaa-mongodb:
+        image: mongo:3.4.10
+        ports:
+            - "27017:27017"
+        command: mongos --configdb trailsgatewayuaa-mongodb-config
+    trailsgatewayuaa-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    trailsgatewayuaa-mongodb-config:
+        image: mongo:3.4.10
+        container_name: trailsgatewayuaa-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
